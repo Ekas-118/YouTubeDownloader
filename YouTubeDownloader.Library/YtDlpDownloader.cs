@@ -20,20 +20,27 @@ namespace YouTubeDownloader.Library
                 return DownloadResponse.InvalidUrl;
             }
 
-            StringBuilder args = new();
-            args.Append($"-P \"{options.OutputFolder}\" ");
-            args.Append($"{(options.FileType == FileType.MP3 ? "-x --audio-format mp3" : "-f mp4")} ");
-            args.Append(options.URL);
+            try
+            {
+                StringBuilder args = new();
+                args.Append($"-P \"{options.OutputFolder}\" ");
+                args.Append($"{(options.FileType == FileType.MP3 ? "-x --audio-format mp3" : "-f mp4")} ");
+                args.Append(options.URL);
 
-            var processInfo = new ProcessStartInfo("yt-dlp.exe", args.ToString());
-            processInfo.CreateNoWindow = false;
+                var processInfo = new ProcessStartInfo("yt-dlp.exe", args.ToString());
+                processInfo.CreateNoWindow = false;
 
-            var process = Process.Start(processInfo);
+                var process = Process.Start(processInfo);
 
-            await process.WaitForExitAsync();
-            process.Close();
+                await process.WaitForExitAsync();
+                process.Close();
 
-            return DownloadResponse.Success;
+                return DownloadResponse.Success;
+            }
+            catch
+            {
+                return DownloadResponse.Error;
+            }
         }
     }
 }
