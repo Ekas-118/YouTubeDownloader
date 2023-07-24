@@ -8,6 +8,6 @@ namespace YouTubeDownloader.Library
 {
     public interface IDownloader
     {
-        Task<DownloadResponse> Download(VideoDownloadOptions options);
+        Task<(DownloadResponse, string)> Download(VideoDownloadOptions options);
     }
 }

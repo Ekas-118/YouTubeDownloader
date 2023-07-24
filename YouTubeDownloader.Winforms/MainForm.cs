@@ -52,7 +52,7 @@ namespace YouTubeDownloader.Winforms
 
             string status = "";
 
-            switch (response)
+            switch (response.Item1)
             {
                 case DownloadResponse.Success:
                     status = "File downloaded successfully.";

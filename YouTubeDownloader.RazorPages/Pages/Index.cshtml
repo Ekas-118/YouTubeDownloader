@@ -4,7 +4,95 @@
     ViewData["Title"] = "Home page";
 }
 
+<style>
+    /* Hide radio buttons */
+    .btn-group .btn-check {
+        position: absolute;
+        clip: rect(0, 0, 0, 0);
+    }
+
+    .arrow {
+        border: solid black;
+        border-width: 0 3px 3px 0;
+        display: inline-block;
+        padding: 3px;
+        margin-bottom: 3px;
+    }
+
+    .down {
+        transform: rotate(45deg);
+        -webkit-transform: rotate(45deg);
+    }
+
+    .btn-group .btn-check:checked + label {
+        background-color: #007bff;
+        color: #fff;
+    }
+</style>
+
 <div class="text-center">
-    <h1 class="display-4">Welcome</h1>
-    <p>Learn about <a href="https://docs.microsoft.com/aspnet/core">building Web apps with ASP.NET Core</a>.</p>
+    <h1 class="display-4">YouTube Downloader</h1>
+    <p>Download video and audio from many websites</p>
 </div>
+
+<form method="post">
+    <div class="input-group">
+        <label class="form-text" for="URL">URL:</label>
+        <input class="form-control mx-2" type="url" placeholder="Enter URL" asp-for="URL" id="URL" />
+        <button type="submit" class="btn btn-primary">Download</button>
+    </div>
+
+    <div class="d-flex justify-content-center">
+        <div class="btn-group my-3" role="group">
+            <input type="radio" class="btn-check" name="SelectedOption" id="MP3" value="MP3" checked>
+            <label class="btn btn-primary mr-3" for="MP3">MP3</label>
+
+            <input type="radio" class="btn-check" name="SelectedOption" id="MP4" value="MP4">
+            <label class="btn btn-primary rounded-0" for="MP4">MP4</label>
+        </div>
+    </div>
+
+    <div class="container">
+        <h2 class="row justify-content-center">
+            <button class="col-2 btn btn-block btn-light border-dark rounded-pill" type="button" data-toggle="collapse" data-target="#collapseOne" aria-expanded="true" aria-controls="collapseOne">
+                Advanced <i class="arrow down"></i>
+            </button>
+        </h2>
+    </div>
+
+    <div>
+        <div id="collapseOne" class="collapse">
+            <div class="card bg-light p-4">
+                <div id="MP3settings">mp3</div>
+                <div id="MP4settings">mp4</div>
+            </div>
+        </div>
+    </div>
+
+</form>
+
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+        var radioButtons = document.querySelectorAll('input[name=SelectedOption]');
+        var mp3Settings = document.getElementById('MP3settings');
+        var mp4Settings = document.getElementById('MP4settings');
+
+        mp4Settings.style.display = 'none';
+
+        radioButtons.forEach(function (radioButton) {
+            radioButton.addEventListener('change', function () {
+                var elementToToggle;
+                if (this.value == "MP3") {
+                    elementToToggle = mp3Settings;
+                }
+                else {
+                    elementToToggle = mp4Settings;
+                }
+                mp3Settings.style.display = 'none';
+                mp4Settings.style.display = 'none';
+
+                elementToToggle.style.display = 'block';
+            });
+        });
+    });
+</script>
