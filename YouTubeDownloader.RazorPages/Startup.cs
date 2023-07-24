@@ -8,6 +8,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using YouTubeDownloader.Library;
 
 namespace YouTubeDownloader.RazorPages
 {
@@ -24,6 +25,7 @@ namespace YouTubeDownloader.RazorPages
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddRazorPages();
+            services.AddScoped<IDownloader, YtDlpDownloader>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

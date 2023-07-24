@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
+using System.Diagnostics;
 using System.Drawing;
 using System.IO;
 using System.Linq;
@@ -16,6 +17,7 @@ namespace YouTubeDownloader.Winforms
     {
         private int _mouseinX, _mouseinY, _mouseX, _mouseY;
         private bool _mouseDown = false;
+
         public MainForm()
         {
             InitializeComponent();
@@ -29,15 +31,21 @@ namespace YouTubeDownloader.Winforms
 
         private async void downloadButton_Click(object sender, EventArgs e)
         {
+            statusLabel.Text =  "Processing...";
+
             urlTextBox.Text = urlTextBox.Text.Trim();
             outputTextBox.Text = outputTextBox.Text.Trim();
 
             if (!Directory.Exists(outputTextBox.Text))
             {
                 statusLabel.Text = "Please enter a valid output folder.";
+                return;
             }
 
-            statusLabel.ResetText();
+            Properties.Settings.Default.OutputFolder = outputTextBox.Text;
+            Properties.Settings.Default.Save();
+
+            statusLabel.Text = "Downloading...";
 
             IDownloader downloader = new YtDlpDownloader();
 
@@ -63,14 +71,25 @@ namespace YouTubeDownloader.Winforms
                 case DownloadResponse.Error:
                     status = "An error occurred.";
                     break;
-                default:
-                    break;
             }
 
             statusLabel.Text = status;
 
-            Properties.Settings.Default.OutputFolder = outputTextBox.Text;
-            Properties.Settings.Default.Save();
+            if (response.Item1 == DownloadResponse.Success)
+            {
+                var processInfo = new ProcessStartInfo()
+                {
+                    FileName = "explorer.exe",
+                    Arguments = Path.GetDirectoryName(response.Item2)
+                };
+
+                Process.Start(processInfo);
+            }
+        }
+        private void browseButton_Click(object sender, EventArgs e)
+        {
+            folderBrowserDialog.ShowDialog();
+            outputTextBox.Text = folderBrowserDialog.SelectedPath;
         }
 
         private void closeButton_Click(object sender, EventArgs e)
@@ -83,11 +102,6 @@ namespace YouTubeDownloader.Winforms
             WindowState = FormWindowState.Minimized;
         }
 
-        private void browseButton_Click(object sender, EventArgs e)
-        {
-            folderBrowserDialog.ShowDialog();
-            outputTextBox.Text = folderBrowserDialog.SelectedPath;
-        }
 
         private void TitleBar_MouseDown(object sender, MouseEventArgs e)
         {

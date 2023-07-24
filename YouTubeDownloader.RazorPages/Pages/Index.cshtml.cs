@@ -12,16 +12,17 @@ namespace YouTubeDownloader.RazorPages.Pages
     public class IndexModel : PageModel
     {
         private readonly ILogger<IndexModel> _logger;
-        private string downloadedFilePath = "";
+        private readonly IDownloader _downloader;
 
         [BindProperty]
-        public FileType SelectedOption { get; set; }
+        public FileType SelectedFileType { get; set; }
         [BindProperty]
         public string URL { get; set; }
 
-        public IndexModel(ILogger<IndexModel> logger)
+        public IndexModel(ILogger<IndexModel> logger, IDownloader downloader)
         {
             _logger = logger;
+            _downloader = downloader;
         }
 
         public void OnGet()
@@ -38,16 +39,14 @@ namespace YouTubeDownloader.RazorPages.Pages
 
             string guid = Guid.NewGuid().ToString();
 
-            VideoDownloadOptions options = new VideoDownloadOptions
+            var options = new VideoDownloadOptions
             {
                 URL = URL,
-                FileType = SelectedOption,
+                FileType = SelectedFileType,
                 OutputFolder = @$"C:\Users\Ekas\Downloads\Temp\{guid}"
             };
 
-            IDownloader downloader = new YtDlpDownloader();
-
-            var response = await downloader.Download(options);
+            var response = await _downloader.Download(options);
 
             string filePath = response.Item2;
             byte[] fileBytes = System.IO.File.ReadAllBytes(filePath);

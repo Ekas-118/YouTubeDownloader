@@ -12,8 +12,7 @@ namespace YouTubeDownloader.Library
     {
         public async Task<(DownloadResponse, string)> Download(VideoDownloadOptions options)
         {
-            Uri uriResult;
-            bool result = Uri.TryCreate(options.URL, UriKind.Absolute, out uriResult)
+            bool result = Uri.TryCreate(options.URL, UriKind.Absolute, out Uri uriResult)
                 && (uriResult.Scheme == Uri.UriSchemeHttp || uriResult.Scheme == Uri.UriSchemeHttps);
 
             if (result == false)
@@ -46,13 +45,13 @@ namespace YouTubeDownloader.Library
                 var processInfo = new ProcessStartInfo("yt-dlp.exe", args.ToString());
                 processInfo.CreateNoWindow = true;
 
-                using (Process process = new Process { StartInfo = processInfo })
+                using (var process = new Process { StartInfo = processInfo })
                 {
                     process.Start();
                     await process.WaitForExitAsync();
                     process.Close();
                 }
-                
+
                 string fullFileName = Path.Combine(options.OutputFolder, $"{fileName}.{(options.FileType == FileType.MP3 ? "mp3" : "mp4")}");
 
                 return (DownloadResponse.Success, fullFileName);
@@ -75,7 +74,7 @@ namespace YouTubeDownloader.Library
             processInfo.RedirectStandardOutput = true;
             processInfo.RedirectStandardError = true;
 
-            using (Process process = new Process { StartInfo = processInfo })
+            using (var process = new Process { StartInfo = processInfo })
             {
                 process.Start();
                 output = process.StandardOutput.ReadToEnd();
