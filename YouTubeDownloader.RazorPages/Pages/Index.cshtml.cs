@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.Extensions.Logging;
 using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Threading.Tasks;
 using YouTubeDownloader.Library;
@@ -17,7 +18,9 @@ namespace YouTubeDownloader.RazorPages.Pages
         [BindProperty]
         public FileType SelectedFileType { get; set; }
         [BindProperty]
-        public string URL { get; set; }
+        [Url(ErrorMessage = "Please enter a valid URL.")]
+        [Required]
+        public string URL { get; set; } = "";
 
         public IndexModel(ILogger<IndexModel> logger, IDownloader downloader)
         {
@@ -25,16 +28,11 @@ namespace YouTubeDownloader.RazorPages.Pages
             _downloader = downloader;
         }
 
-        public void OnGet()
-        {
-
-        }
-
         public async Task<IActionResult> OnPost()
         {
             if (ModelState.IsValid == false)
             {
-                return BadRequest();
+                return Page();
             }
 
             string guid = Guid.NewGuid().ToString();
@@ -43,10 +41,16 @@ namespace YouTubeDownloader.RazorPages.Pages
             {
                 URL = URL,
                 FileType = SelectedFileType,
-                OutputFolder = @$"C:\Users\Ekas\Downloads\Temp\{guid}"
+                OutputFolder = @$"Downloads\Temp\{guid}"
             };
 
             var response = await _downloader.Download(options);
+
+            if (response.Item1 != DownloadResponse.Success)
+            {
+                ModelState.AddModelError("URL", "Invalid URL.");
+                return Page();
+            }
 
             string filePath = response.Item2;
             byte[] fileBytes = System.IO.File.ReadAllBytes(filePath);

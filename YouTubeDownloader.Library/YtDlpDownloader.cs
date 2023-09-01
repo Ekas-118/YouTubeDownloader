@@ -4,6 +4,7 @@ using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Text;
+using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 
 namespace YouTubeDownloader.Library
@@ -52,7 +53,7 @@ namespace YouTubeDownloader.Library
                     process.Close();
                 }
 
-                string fullFileName = Path.Combine(options.OutputFolder, $"{fileName}.{(options.FileType == FileType.MP3 ? "mp3" : "mp4")}");
+                string fullFileName = Path.Combine(Path.GetFullPath(options.OutputFolder), $"{fileName}.{(options.FileType == FileType.MP3 ? "mp3" : "mp4")}");
 
                 return (DownloadResponse.Success, fullFileName);
             }
@@ -84,7 +85,9 @@ namespace YouTubeDownloader.Library
                 process.Close();
             }
 
-            if (string.IsNullOrEmpty(error) == false)
+            output = Regex.Replace(output, @"[^\w\-. ]", "");
+
+            if (string.IsNullOrEmpty(error) == false && error.StartsWith("ERROR"))
             {
                 throw new ArgumentException("Failed to get filename for URL", nameof(url));
             }

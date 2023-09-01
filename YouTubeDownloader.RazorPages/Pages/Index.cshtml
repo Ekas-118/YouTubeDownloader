@@ -35,12 +35,17 @@
     <p>Download video and audio from many websites</p>
 </div>
 
-<form method="post">
+<form method="post" id="mainForm">
     <div class="input-group">
         <label class="form-text" for="URL">URL:</label>
-        <input class="form-control mx-2" type="url" placeholder="Enter URL" asp-for="URL" id="URL" />
-        <button type="submit" class="btn btn-primary">Download</button>
+        <input class="form-control mx-2" type="url" placeholder="Enter URL" asp-for="URL" id="URL" required />
+        <button type="submit" class="btn btn-primary" onclick="enableLoading()">Download</button>
+        <div class="spinner-border mx-2 mt-1 text-primary" id="loading" style="display:none" role="status">
+            <span class="sr-only">Downloading...</span>
+        </div>
     </div>
+
+    <span asp-validation-for="URL" class="text-danger"></span>
 
     <div class="d-flex justify-content-center">
         <div class="btn-group my-3" role="group">
@@ -71,6 +76,10 @@
 
 </form>
 
+@section Scripts {
+    @{ await Html.RenderPartialAsync("_ValidationScriptsPartial"); }
+}
+
 <script>
     document.addEventListener('DOMContentLoaded', function () {
         var radioButtons = document.querySelectorAll('input[name=SelectedFileType]');
@@ -82,12 +91,14 @@
         radioButtons.forEach(function (radioButton) {
             radioButton.addEventListener('change', function () {
                 var elementToToggle;
+
                 if (this.value == "MP3") {
                     elementToToggle = mp3Settings;
                 }
                 else {
                     elementToToggle = mp4Settings;
                 }
+
                 mp3Settings.style.display = 'none';
                 mp4Settings.style.display = 'none';
 
@@ -95,4 +106,13 @@
             });
         });
     });
+
+    function enableLoading() {
+        var mainForm = document.getElementById("mainForm");
+
+        if (mainForm.checkValidity()) {
+            var div = document.getElementById("loading");
+            div.style.display = "block";
+        }
+    }
 </script>
