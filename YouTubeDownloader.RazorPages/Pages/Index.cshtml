@@ -17,9 +17,6 @@
         display: inline-block;
         padding: 3px;
         margin-bottom: 3px;
-    }
-
-    .down {
         transform: rotate(45deg);
         -webkit-transform: rotate(45deg);
     }
@@ -32,15 +29,15 @@
 
 <div class="text-center">
     <h1 class="display-4">YouTube Downloader</h1>
-    <p>Download video and audio from many websites</p>
+    <p>Download highest quality video and audio from many websites</p>
 </div>
 
 <form method="post" id="mainForm">
     <div class="input-group">
         <label class="form-text" for="URL">URL:</label>
         <input class="form-control mx-2" type="url" placeholder="Enter URL" asp-for="URL" id="URL" required />
-        <button type="submit" class="btn btn-primary" onclick="enableLoading()">Download</button>
-        <div class="spinner-border mx-2 mt-1 text-primary" id="loading" style="display:none" role="status">
+        <button id="dlButton" type="submit" class="btn btn-primary" onclick="enableLoading()">Download</button>
+        <div class="spinner-border mx-2 mt-1 text-primary" id="loading" style="visibility:hidden" role="status">
             <span class="sr-only">Downloading...</span>
         </div>
     </div>
@@ -56,11 +53,11 @@
             <label class="btn btn-primary rounded-0" for="MP4">MP4</label>
         </div>
     </div>
-
+    <!--
     <div class="container">
         <h2 class="row justify-content-center">
             <button class="col-2 btn btn-block btn-light border-dark rounded-pill" type="button" data-toggle="collapse" data-target="#collapseOne" aria-expanded="true" aria-controls="collapseOne">
-                Advanced <i class="arrow down"></i>
+                Advanced <i class="arrow"></i>
             </button>
         </h2>
     </div>
@@ -73,7 +70,7 @@
             </div>
         </div>
     </div>
-
+    -->
 </form>
 
 @section Scripts {
@@ -112,7 +109,10 @@
 
         if (mainForm.checkValidity()) {
             var div = document.getElementById("loading");
-            div.style.display = "block";
+            div.style.visibility = "visible";
+
+            var button = document.getElementById("dlButton");
+            button.disabled = true;
         }
     }
 </script>
