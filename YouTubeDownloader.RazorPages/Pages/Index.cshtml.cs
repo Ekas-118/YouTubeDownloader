@@ -1,9 +1,11 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
+using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
+using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
 using YouTubeDownloader.Library;
@@ -12,7 +14,7 @@ namespace YouTubeDownloader.RazorPages.Pages
 {
     public class IndexModel : PageModel
     {
-        private readonly ILogger<IndexModel> _logger;
+        private readonly IConfiguration _configuration;
         private readonly IDownloader _downloader;
 
         [BindProperty]
@@ -22,9 +24,9 @@ namespace YouTubeDownloader.RazorPages.Pages
         [Required]
         public string URL { get; set; } = "";
 
-        public IndexModel(ILogger<IndexModel> logger, IDownloader downloader)
+        public IndexModel(IConfiguration configuration, IDownloader downloader)
         {
-            _logger = logger;
+            _configuration = configuration;
             _downloader = downloader;
         }
 
@@ -41,25 +43,18 @@ namespace YouTubeDownloader.RazorPages.Pages
             {
                 URL = URL,
                 FileType = SelectedFileType,
-                OutputFolder = @$"Downloads\Temp\{guid}"
+                OutputFolder = $"{_configuration["OutputDirectory"]}{guid}"
             };
 
             var response = await _downloader.Download(options);
 
             if (response.Item1 != DownloadResponse.Success)
             {
-                ModelState.AddModelError("URL", "Invalid URL.");
+                ModelState.AddModelError(nameof(URL), "Invalid URL.");
                 return Page();
             }
 
-            string filePath = response.Item2;
-            byte[] fileBytes = System.IO.File.ReadAllBytes(filePath);
-            var fileContentResult = new FileContentResult(fileBytes, "application/octet-stream")
-            {
-                FileDownloadName = System.IO.Path.GetFileName(filePath)
-            };
-            
-            return fileContentResult;
+            return RedirectToPage($"/download", new { Id = guid });
         }
     }
 }

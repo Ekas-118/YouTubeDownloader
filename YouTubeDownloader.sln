@@ -7,7 +7,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "YouTubeDownloader.Winforms"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "YouTubeDownloader.Library", "YouTubeDownloader.Library\YouTubeDownloader.Library.csproj", "{928D4814-BE4E-4898-9E6C-0BBB5A91A8E8}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "YouTubeDownloader.RazorPages", "YouTubeDownloader.RazorPages\YouTubeDownloader.RazorPages.csproj", "{52CBD715-C620-49AA-9566-76FDFA8F1089}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "YouTubeDownloader.RazorPages", "YouTubeDownloader.RazorPages\YouTubeDownloader.RazorPages.csproj", "{52CBD715-C620-49AA-9566-76FDFA8F1089}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

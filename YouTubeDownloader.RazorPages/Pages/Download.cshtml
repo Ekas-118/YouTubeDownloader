@@ -1,0 +1,25 @@
+﻿@page "/download/{Id}"
+
+@model YouTubeDownloader.RazorPages.Pages.DownloadModel
+@{
+    ViewData["Title"] = "Download";
+}
+
+@if (Model.Id == Guid.Empty)
+{
+    <h1>The requested file was not found.</h1>
+}
+else
+{
+    <div class="text-center">
+        <h1 class="display-4">Your file is ready for download!</h1>
+        <p>@Model.FileName</p>
+    </div>
+
+    <div class="d-flex justify-content-center">
+        <form method="post">
+            <button type="submit" class="btn btn-primary">Download</button>
+        </form>
+    </div>
+
+}
