@@ -19,9 +19,8 @@ namespace YouTubeDownloader.RazorPages.Pages
 
         [BindProperty]
         public FileType SelectedFileType { get; set; }
+
         [BindProperty]
-        [Url(ErrorMessage = "Please enter a valid URL.")]
-        [Required]
         public string URL { get; set; } = "";
 
         public IndexModel(IConfiguration configuration, IDownloader downloader)

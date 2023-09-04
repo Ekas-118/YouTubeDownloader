@@ -12,9 +12,9 @@
 <form method="post" id="mainForm">
     <div class="input-group">
         <label class="form-text" for="URL">URL:</label>
-        <input class="form-control mx-2" type="url" placeholder="Enter URL" asp-for="URL" id="URL" required />
-        <button id="dlButton" type="submit" class="btn btn-primary" onclick="enableLoading()">Download</button>
-        <div class="spinner-border mx-2 mt-1 text-primary" id="loading" style="visibility:hidden" role="status">
+        <input class="form-control mx-2" type="url" data-val="false" placeholder="Enter URL" asp-for="URL" id="URL" required />
+        <button id="dlButton" type="submit" class="btn btn-primary" onclick="enableSpinner()">Download</button>
+        <div class="spinner-border mx-2 mt-1 text-primary" id="spinner" style="visibility:hidden" role="status">
             <span class="sr-only">Downloading...</span>
         </div>
     </div>
@@ -81,12 +81,12 @@
         });
     });*/
 
-    function enableLoading() {
+    function enableSpinner() {
         var mainForm = document.getElementById("mainForm");
 
         if (mainForm.checkValidity()) {
-            var div = document.getElementById("loading");
-            div.style.visibility = "visible";
+            var spinner = document.getElementById("spinner");
+            spinner.style.visibility = "visible";
 
             var button = document.getElementById("dlButton");
             button.disabled = true;
