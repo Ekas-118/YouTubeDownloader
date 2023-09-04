@@ -42,6 +42,8 @@ namespace YouTubeDownloader.Winforms
                 return;
             }
 
+            downloadButton.Enabled = false;
+
             Properties.Settings.Default.OutputFolder = outputTextBox.Text;
             Properties.Settings.Default.Save();
 
@@ -85,6 +87,8 @@ namespace YouTubeDownloader.Winforms
 
                 Process.Start(processInfo);
             }
+
+            downloadButton.Enabled = true;
         }
         private void browseButton_Click(object sender, EventArgs e)
         {
