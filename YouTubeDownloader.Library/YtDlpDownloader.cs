@@ -68,7 +68,7 @@ namespace YouTubeDownloader.Library
             string output = "";
             string error = "";
 
-            string args = $"-e \"{url}\"";
+            string args = $"--print filename -o \"%(title)s %(id)s\" \"{url}\"";
 
             var processInfo = new ProcessStartInfo("yt-dlp.exe", args);
             processInfo.CreateNoWindow = true;
@@ -84,8 +84,6 @@ namespace YouTubeDownloader.Library
                 output = output.Trim();
                 process.Close();
             }
-
-            output = Regex.Replace(output, @"[^\w\-. ]", "");
 
             if (string.IsNullOrEmpty(error) == false && error.StartsWith("ERROR"))
             {
