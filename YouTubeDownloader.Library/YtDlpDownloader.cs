@@ -41,7 +41,7 @@ namespace YouTubeDownloader.Library
                 args.Append($"-P \"{options.OutputFolder}\" ");
                 args.Append($"-o \"{fileName}.{(options.FileType == FileType.MP3 ? "mp3" : "mp4")}\" ");
                 args.Append($"{(options.FileType == FileType.MP3 ? "-x --audio-format mp3" : "-f mp4")} ");
-                args.Append(options.URL);
+                args.Append($"\"{options.URL}\"");
 
                 var processInfo = new ProcessStartInfo("yt-dlp.exe", args.ToString());
                 processInfo.CreateNoWindow = true;
@@ -68,7 +68,7 @@ namespace YouTubeDownloader.Library
             string output = "";
             string error = "";
 
-            string args = $"-e {url}";
+            string args = $"-e \"{url}\"";
 
             var processInfo = new ProcessStartInfo("yt-dlp.exe", args);
             processInfo.CreateNoWindow = true;
