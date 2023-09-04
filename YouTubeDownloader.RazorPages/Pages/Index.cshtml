@@ -4,29 +4,6 @@
     ViewData["Title"] = "Home page";
 }
 
-<style>
-    /* Hide radio buttons */
-    .btn-group .btn-check {
-        position: absolute;
-        clip: rect(0, 0, 0, 0);
-    }
-
-    .arrow {
-        border: solid black;
-        border-width: 0 3px 3px 0;
-        display: inline-block;
-        padding: 3px;
-        margin-bottom: 3px;
-        transform: rotate(45deg);
-        -webkit-transform: rotate(45deg);
-    }
-
-    .btn-group .btn-check:checked + label {
-        background-color: #007bff;
-        color: #fff;
-    }
-</style>
-
 <div class="text-center">
     <h1 class="display-4">YouTube Downloader</h1>
     <p>Download highest quality video and audio from many websites</p>
@@ -78,7 +55,7 @@
 }
 
 <script>
-    document.addEventListener('DOMContentLoaded', function () {
+    /*document.addEventListener('DOMContentLoaded', function () {
         var radioButtons = document.querySelectorAll('input[name=SelectedFileType]');
         var mp3Settings = document.getElementById('MP3settings');
         var mp4Settings = document.getElementById('MP4settings');
@@ -102,7 +79,7 @@
                 elementToToggle.style.display = 'block';
             });
         });
-    });
+    });*/
 
     function enableLoading() {
         var mainForm = document.getElementById("mainForm");
