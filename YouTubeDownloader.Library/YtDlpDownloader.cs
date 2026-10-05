@@ -1,10 +1,7 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
-using System.Linq;
 using System.Text;
-using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 
 namespace YouTubeDownloader.Library
@@ -43,14 +40,15 @@ namespace YouTubeDownloader.Library
                 args.Append($"{(options.FileType == FileType.MP3 ? "-x --audio-format mp3" : "-t mp4")} ");
                 args.Append($"\"{options.URL}\"");
 
-                var processInfo = new ProcessStartInfo("yt-dlp.exe", args.ToString());
-                processInfo.CreateNoWindow = true;
+                var processInfo = new ProcessStartInfo("yt-dlp.exe", args.ToString())
+                {
+                    CreateNoWindow = true
+                };
 
                 using (var process = new Process { StartInfo = processInfo })
                 {
                     process.Start();
                     await process.WaitForExitAsync();
-                    process.Close();
                 }
 
                 string fullFileName = Path.Combine(Path.GetFullPath(options.OutputFolder), $"{fileName}.{(options.FileType == FileType.MP3 ? "mp3" : "mp4")}");
@@ -68,22 +66,24 @@ namespace YouTubeDownloader.Library
             string output = "";
             string error = "";
 
-            string args = $"--print filename -o \"%(title)s %(id)s\" \"{url}\"";
+            string args = $"--print filename -o \"%(title)s\" \"{url}\"";
 
-            var processInfo = new ProcessStartInfo("yt-dlp.exe", args);
-            processInfo.CreateNoWindow = true;
-            processInfo.RedirectStandardOutput = true;
-            processInfo.RedirectStandardError = true;
+            var processInfo = new ProcessStartInfo("yt-dlp.exe", args)
+            {
+                CreateNoWindow = true,
+                RedirectStandardOutput = true,
+                RedirectStandardError = true
+            };
 
             using (var process = new Process { StartInfo = processInfo })
             {
                 process.Start();
-                output = process.StandardOutput.ReadToEnd();
-                error = process.StandardError.ReadToEnd();
+                output = await process.StandardOutput.ReadToEndAsync();
+                error = await process.StandardError.ReadToEndAsync();
                 await process.WaitForExitAsync();
-                output = output.Trim();
-                process.Close();
             }
+
+            output = StringHelper.SanitizeFileName(output);
 
             if (string.IsNullOrEmpty(error) == false && error.StartsWith("ERROR"))
             {
