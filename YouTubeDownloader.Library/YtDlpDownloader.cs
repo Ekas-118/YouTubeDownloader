@@ -40,7 +40,7 @@ namespace YouTubeDownloader.Library
                 StringBuilder args = new();
                 args.Append($"-P \"{options.OutputFolder}\" ");
                 args.Append($"-o \"{fileName}.{(options.FileType == FileType.MP3 ? "mp3" : "mp4")}\" ");
-                args.Append($"{(options.FileType == FileType.MP3 ? "-x --audio-format mp3" : "-f mp4")} ");
+                args.Append($"{(options.FileType == FileType.MP3 ? "-x --audio-format mp3" : "-t mp4")} ");
                 args.Append($"\"{options.URL}\"");
 
                 var processInfo = new ProcessStartInfo("yt-dlp.exe", args.ToString());
